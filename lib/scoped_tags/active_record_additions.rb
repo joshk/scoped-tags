@@ -5,7 +5,7 @@ module ScopedTags
     def self.included(base)
       base.class_eval do
         def self.scoped_tags(contexts, options = nil)
-          cattr_accessor :tag_contexts
+          self.class.instance_eval{ attr_accessor :tag_contexts }
           
           raise ScopedTagsError, 'context is required for scoped-tags setup' if contexts.blank?
           
@@ -17,7 +17,7 @@ module ScopedTags
           self.tag_contexts.each do |context|
             has_many context, :through => :taggings, :class_name => 'Tag',
                               :source  => :tag,
-                              :conditions => ["context = ?", context.to_s.downcase]
+                              :conditions => ['context = ?', context.to_s.downcase]
             
             c = context.to_s.singularize
             define_method("#{c}_list")   { get_tag_list(context.to_s.downcase) }
