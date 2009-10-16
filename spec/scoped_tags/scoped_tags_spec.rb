@@ -50,6 +50,12 @@ describe "ScopedTaggedModel" do
       @scoped_model.genre_list.should include('blues')
     end
     
+    it "should change the entire list when using genre_list= with a comma seperated list of tags" do
+      @scoped_model.genre_list = 'blues, rock, country'
+      @scoped_model.genres.size.should == 3
+      @scoped_model.genre_list.should == ["rock", "blues", "country"]
+    end
+    
     it "should only add uniq tags to the association" do
       @scoped_model.genre_list << 'blues'
       @scoped_model.genres.size.should == 2 
@@ -67,6 +73,73 @@ describe "ScopedTaggedModel" do
       @scoped_model.genres.delete(@scoped_model.genres.last)
       @scoped_model.genres.size.should == 1
       @scoped_model.genre_list.should include('rock')
+    end
+    
+    it "#tagged_with_genres" do
+      tag = 'pop'
+      
+      @scoped_model.genre_list << tag
+      @scoped_model.save!
+      
+      ar_check = ScopedTaggedModel.all(:conditions => ['tags.name IN (?) AND tags.context = ?', tag, 'genres'], :include => [:taggings, :tags])
+      ar_check.size.should == 1
+      
+      ScopedTaggedModel.methods.should include('tagged_with_genres')
+      
+      st_check = ScopedTaggedModel.tagged_with_genres(tag)
+      st_check.size.should == 1
+      st_check.first.id.should == @scoped_model.id
+    end
+    
+    it "#tagged_with_genres with options" do
+      tag = 'pop'
+      
+      ScopedTaggedModel.delete_all
+      options_check1 = ScopedTaggedModel.new
+      options_check1.genre_list << tag
+      options_check1.save!
+      
+      options_check2 = ScopedTaggedModel.new
+      options_check2.genre_list << tag
+      options_check2.save!
+      
+      st_check = ScopedTaggedModel.tagged_with_genres(tag, :limit => 1)
+      st_check.size.should == 1
+      st_check.first.id.should == options_check1.id
+    end
+    
+    it "#tagged_with_genres with options and multiple tags in an array" do
+      tag = ['pop', 'techno', 'dance']
+      
+      ScopedTaggedModel.delete_all
+      options_check1 = ScopedTaggedModel.new
+      options_check1.genre_list << tag
+      options_check1.save!
+      
+      options_check2 = ScopedTaggedModel.new
+      options_check2.genre_list << tag
+      options_check2.save!
+      
+      st_check = ScopedTaggedModel.tagged_with_genres(tag, :limit => 1)
+      st_check.size.should == 1
+      st_check.first.id.should == options_check1.id
+    end
+    
+    it "#tagged_with_genres with options and multiple tags in a string" do
+      tag = 'pop, techno, dance'
+      
+      ScopedTaggedModel.delete_all
+      options_check1 = ScopedTaggedModel.new
+      options_check1.genre_list << tag
+      options_check1.save!
+      
+      options_check2 = ScopedTaggedModel.new
+      options_check2.genre_list << tag
+      options_check2.save!
+      
+      st_check = ScopedTaggedModel.tagged_with_genres(tag, :limit => 1)
+      st_check.size.should == 1
+      st_check.first.id.should == options_check1.id
     end
   end
 end 

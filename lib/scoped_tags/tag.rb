@@ -1,5 +1,5 @@
 class Tag < ActiveRecord::Base
-  has_many :taggings, :dependent => :destroy
+  has_many :taggings, :dependent => :delete_all
    
   validates_presence_of :context
   validates_uniqueness_of :name, :case_sensitive => false, :scope => :context
@@ -8,6 +8,11 @@ class Tag < ActiveRecord::Base
   
   before_validation :trim_spaces, :lowercase_name
   
+  
+  def self.find_or_new_by_name_and_context(name, context)
+    tag = self.find(:first, :conditions => ["name = ? and context = ?", name, context])
+    tag || Tag.new(:name => name, :context => context)
+  end
   
   def ==(object)
     super || (object.is_a?(Tag) && self.name == object.name && self.context == object.context)
