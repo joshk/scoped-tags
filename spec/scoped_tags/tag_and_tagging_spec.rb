@@ -2,8 +2,20 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 
 describe Tagging do
+  before(:all) { Tagging.create!(:tag_id => 1, :taggable_id => 1) }
+  
   it { should belong_to(:tag) }
   it { should belong_to(:taggable) }
+  it { should validate_uniqueness_of(:taggable_id).scoped_to(:tag_id) }
+  
+  it { should allow_mass_assignment_of(:taggable_id)
+       should allow_mass_assignment_of(:taggable_type)
+       should allow_mass_assignment_of(:tag_id) }
+  
+  it { should_not allow_mass_assignment_of(:created_at)
+       should_not allow_mass_assignment_of(:updated_at) }
+       
+  it { should have_db_index([:taggable_id, :taggable_type]) }
 end
 
 
@@ -20,6 +32,8 @@ describe Tag do
   
   it { should_not allow_mass_assignment_of(:created_at)
        should_not allow_mass_assignment_of(:updated_at) }
+  
+  it { should have_db_index([:context, :name]) }
   
   it "should trim and squeeze spaces from name and context before validation" do
     t = Tag.new(:name => ' rock   and      roll', :context => '   genres   ')

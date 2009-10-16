@@ -14,8 +14,7 @@ ActiveRecord::Schema.define :version => 0 do
     t.references :taggable, :polymorphic => true
   end
   
-  create_table "people", :force => true do |t|
-    t.string :name
-  end
+  add_index "tags", ['context', 'name']
+  add_index "taggings", ['taggable_id', 'taggable_type']
   
 end
