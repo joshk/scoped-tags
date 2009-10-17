@@ -1,18 +1,26 @@
 Scoped-Tags
 ===========
 
-To say that this plugin is better than other tagging plugins/gems would be an outright lie.
+When it comes to tagging dsls there are three main players, acts-as-taggable-on, acts-as-taggable-on-steriods and is-taggable.
+Each seem to have one thing is common and thats using an after save callback to sync the tags list (usually an array) with
+the tags association. 
 
-Each have there power and weakness, scoped-tags aims to fill a small gap where tags can be specified for a category of tag,
-and also allow for cross use of comma separated strings and the association helpers which rails gives you for free.
-The comma separated list is kept in sync with the association (in most cases) so that nasty before\_save and after\_save 
-filters are not needed. 
+The key difference between scoped-tags and the other players on the field is that scoped-tags syncs 
+the array version with the association version upon each request. Currently this is via a child Array implementation, but 
+this will change to a proxy association type implementation shortly.
+
+Also, scoped-tags will, in its next release, allow for tags to be strictly or silently scoped, with the default allowing
+tag creation if the tag does not exist.
 
 
-Tagging plugin comparisons
---------------------------
+Key Features
+------------
 
-differences between acts-as-taggable-on and is-taggable
+- multiple tag contexts per model
+- works with sphinx and thinking-sphinx
+- add and remove tags using array like features
+- association and array list stay in sync
+- tags are available for use in the validations as they are always kept in sync
 
 
 
@@ -30,25 +38,54 @@ How can I use it?
     # and me.interests.build(:name => 'scuba') does not work at the moment either 
     # (has_many through issue)
 
-    me.genre_tags => ['scuba']
+    me.interest_list => ['scuba']
 
-    me.genre_tags << 'cycling'
+    me.interest_list << 'cycling'
     # comma seperated strings are excepted, as well as arrays of strings
 
-    me.genres => [#<Tag id: nil, name: "scuba", context: 'interests'>,#<Tag id: nil, name: "cycling", context: 'interests'>]
+    me.interests => [#<Tag id: nil, name: "scuba", context: 'interests'>,#<Tag id: nil, name: "cycling", context: 'interests'>]
     
 
 
 Things to watch out for
 -----------------------
 
-- updating model (transaction and params)
+### _updating a scoped tagged model via a controller update_
+
+be aware that if no tags are selected then the browser
+does not pass through a blank array. This means if the model previously had tags saved to it and you remove the tags, the browser
+will not pass though the changes because the select box is empty meaning the tags will not be removed. 
+
+An example of
+this is the  FCBKcomplete javascript plugin, it uses a select box behind the scenes to store the tags and pass
+them through to the controller, but if none are selected then the browser passes nothing to the controller, 
+not even a blank array. To fix this, add the following method to the controller and add it as a before\_filter to the update
+action.  
+
+Add to the controller:
+    
+    before_filter :check_blank_tag_ids, :only => :update
+    
+    def check_blank_tag_ids
+        params[:person][:interest_ids] = [] if params[:person] && params[:person][:interest_ids].blank?
+    end
+
+
+### _use a transaction when updating the scoped model_
+
+otherwise the tags will save even if the model validations fail.
+This is due to the standard behavior of has\_many :through relationships.
+    
+Example
+
+    Person.transaction { @person.update_attributes!(params[:person]) }
+
 
 
 
 Future enhancements
 -------------------
 
-- turn TagList into more of a proxy instead of half Array and half beast
-- add strict scoping on setup (scoped_tags :interests, :strict => true), thus any tag added which is not already in the tags table for that context will be rejected
+- turn TagList into more of a proxy instead of half Array and half beast, similar to ActiveRecord ProxyAssociation
+- add strict and silent scoping on setup (scoped_tags :interests, :strict => true), thus any tag added which is not already in the tags table for that context will be rejected
 - get the instance.context.build method to work correctly
