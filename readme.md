@@ -6,10 +6,13 @@ Each seem to have one thing is common and thats using an after save callback to 
 the tags association. 
 
 The key difference between scoped-tags and the other players on the field is that scoped-tags syncs 
-the array version with the association version upon each request. Currently this is via a child Array implementation, but 
-this will change to a proxy association type implementation shortly.
+the array version with the association version upon each request. 
 
-Also, scoped-tags will, in its next release, allow for tags to be strictly or silently scoped, with the default allowing
+The initial array tag list implementation was half Array half beast. The current version has been updated to use a proxy
+based implementation for the array list, similar to the ActiveRecord ProxyAssociation which is used for the different
+relationship associations. This is the heart of the code which syncs the array style listing with the association listing.
+
+Scoped-tags will, in its next release, allow for tags to be strictly or silently scoped, with the default allowing
 tag creation if the tag does not exist.
 
 
@@ -86,6 +89,5 @@ Example
 Future enhancements
 -------------------
 
-- turn TagList into more of a proxy instead of half Array and half beast, similar to ActiveRecord ProxyAssociation
 - add strict and silent scoping on setup (scoped_tags :interests, :strict => true), thus any tag added which is not already in the tags table for that context will be rejected
 - get the instance.context.build method to work correctly
