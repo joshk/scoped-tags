@@ -4,7 +4,7 @@ require 'shoulda'
 require 'active_support'
 require 'active_record'
 
-require 'scoped_tags'
+require 'scoped-tags'
 
 Spec::Runner.configure do |config|
   config.include(Shoulda::ActiveRecord::Matchers, :type => :model)

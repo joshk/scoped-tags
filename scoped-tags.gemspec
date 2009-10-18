@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{scoped-tags}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Kalderimis"]
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
      "generators/scoped_tags_migration/scoped_tags_generator.rb",
      "generators/scoped_tags_migration/templates/migration.rb",
      "install.rb",
-     "lib/scoped_tags.rb",
+     "lib/scoped-tags.rb",
      "lib/scoped_tags/active_record_additions.rb",
      "lib/scoped_tags/tag.rb",
      "lib/scoped_tags/tag_list_collection.rb",
