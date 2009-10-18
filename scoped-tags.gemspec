@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{scoped-tags}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Kalderimis"]
-  s.date = %q{2009-10-16}
+  s.date = %q{2009-10-18}
   s.email = %q{josh.kalderimis@gmail.com}
   s.files = [
     "MIT-LICENSE",
@@ -20,7 +20,8 @@ Gem::Specification.new do |s|
      "lib/scoped_tags.rb",
      "lib/scoped_tags/active_record_additions.rb",
      "lib/scoped_tags/tag.rb",
-     "lib/scoped_tags/tag_list.rb",
+     "lib/scoped_tags/tag_list_collection.rb",
+     "lib/scoped_tags/tag_list_proxy.rb",
      "lib/scoped_tags/tagging.rb",
      "readme.md",
      "uninstall.rb"
@@ -31,12 +32,14 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Scoped tagging plugin for your rails models which keeps your associations in sync with your tag arrays}
   s.test_files = [
-    "spec/schema.rb",
+    "spec/debug.log",
+     "spec/schema.rb",
      "spec/scoped_tags",
      "spec/scoped_tags/scoped_tags_spec.rb",
      "spec/scoped_tags/tag_and_tagging_spec.rb",
      "spec/scoped_tags/tag_list_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/test.sqlite3"
   ]
 
   if s.respond_to? :specification_version then
