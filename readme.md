@@ -26,12 +26,31 @@ Key Features
 - tags are available for use in the validations as they are always kept in sync
 
 
+Installation
+------------
+
+    ./script/plugin install git://github.com/joshk/scoped-tags.git
+
+or
+
+    gem install scoped-tags --source http://gemcutter.org
+
+although it is highly recommended that you install the gemcutter gem and set gemcutter as your default gem repository.
+
+If you are using rails you can also use:
+
+    config.gem 'scoped-tags', :source => 'http://gemcutter.org' # source not needed if gemcutter is installed
+
+To generate the migration file use:
+
+    ./script/generate scoped_tags_migration
+
 
 How can I use it?
 -----------------
 
     class Person
-      scoped_tags :genres
+      scoped_tags :interests
     end
 
     me = Person.new(:name => 'Josh')
