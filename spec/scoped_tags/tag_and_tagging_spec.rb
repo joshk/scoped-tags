@@ -5,7 +5,7 @@ describe Tagging do
   
   before(:all) do 
     reload_database
-    Tagging.create!(:tag_id => 1, :taggable_id => 1) 
+    Tagging.create!(:tag_id => 1, :taggable_id => 1, :taggable_type => "Context1") 
   end
   
   it { should belong_to(:tag) }
@@ -20,6 +20,13 @@ describe Tagging do
        should_not allow_mass_assignment_of(:updated_at) }
        
   it { should have_db_index([:taggable_id, :taggable_type]) }
+  
+  it "should validate uniqueness of taggable_id scoped to tag_id and taggable type" do
+    proc {
+      Tagging.create!(:tag_id => 1, :taggable_id => 1, :taggable_type => "Context2")
+    }.should_not raise_error
+  end
+  
 end
 
 
