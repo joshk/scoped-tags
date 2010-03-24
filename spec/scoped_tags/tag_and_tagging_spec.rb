@@ -10,7 +10,7 @@ describe Tagging do
   
   it { should belong_to(:tag) }
   it { should belong_to(:taggable) }
-  it { should validate_uniqueness_of(:taggable_id).scoped_to(:tag_id) }
+  it { should validate_uniqueness_of(:taggable_id).scoped_to(:tag_id, :taggable_type) }
   
   it { should allow_mass_assignment_of(:taggable_id)
        should allow_mass_assignment_of(:taggable_type)
