@@ -2,7 +2,11 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 
 describe Tagging do
-  before(:all) { Tagging.create!(:tag_id => 1, :taggable_id => 1) }
+  
+  before(:all) do 
+    reload_database
+    Tagging.create!(:tag_id => 1, :taggable_id => 1) 
+  end
   
   it { should belong_to(:tag) }
   it { should belong_to(:taggable) }
@@ -56,6 +60,8 @@ describe Tag do
   end
   
   it "#find_or_new_by_name_ane_context" do
+    reload_database # or we will have duplication
+    
     Tag.create!(:name => 'pop', :context => 'genres')
     s = Tag.find_or_new_by_name_and_context('pop', 'genres')
     s.new_record?.should be_false
