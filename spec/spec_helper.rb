@@ -3,25 +3,27 @@ require 'rubygems'
 require 'spec'
 require 'shoulda'
 
+require 'sqlite3' # So we don't get Encoding errors which we get with plain sqlite3
+
 require 'active_support'
 require 'active_record'
 
 require 'scoped-tags'
 
-Spec::Runner.configure do |config|
-  config.include(Shoulda::ActiveRecord::Matchers, :type => :model)
+
+def reload_database
+  load(File.expand_path('../schema.rb', __FILE__))
 end
 
-TEST_DATABASE_FILE = 'spec/test.sqlite3'
+Spec::Runner.configure do |config|
+  config.include(Shoulda::ActiveRecord::Matchers, :type => :model)
 
-File.unlink(TEST_DATABASE_FILE) if File.exist?(TEST_DATABASE_FILE)
-ActiveRecord::Base.establish_connection(
-  "adapter" => "sqlite3", "database" => TEST_DATABASE_FILE
-)
-
-load('schema.rb')
-
-RAILS_DEFAULT_LOGGER = Logger.new("spec/debug.log")
+  config.before(:suite) do
+    ActiveRecord::Base.logger = Logger.new(File.expand_path("../debug.log", __FILE__))
+    ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+    reload_database
+  end
+end
 
 class ScopedTaggedModel < ActiveRecord::Base
   scoped_tags :genres
