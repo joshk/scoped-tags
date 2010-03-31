@@ -1,19 +1,11 @@
 require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
+require 'spec/rake/spectask'
 
-desc 'Default: run unit tests.'
-task :default => :test
-
-
-desc 'Generate documentation for the scoped_tags plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'scoped-tags'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.libs = ['lib']
 end
+
+task :default  => :spec
 
 
 begin
@@ -24,7 +16,7 @@ begin
     gemspec.author  = "Josh Kalderimis"
     gemspec.email   = "josh.kalderimis@gmail.com"
     gemspec.homepage = "http://github.com/joshk/scoped-tags"
-    
+
     gemspec.files = FileList[
         "generators/**/*",
         "install.rb",
@@ -35,7 +27,7 @@ begin
         "uninstall.rb"
       ]
     gemspec.test_files = FileList["spec/**/*"]
-    
+
     gemspec.add_dependency 'activerecord', '>= 2.3.3'
   end
   Jeweler::GemcutterTasks.new

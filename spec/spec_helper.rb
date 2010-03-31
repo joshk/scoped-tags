@@ -1,3 +1,5 @@
+require 'rubygems'
+
 require 'spec'
 require 'shoulda'
 
@@ -16,7 +18,7 @@ File.unlink(TEST_DATABASE_FILE) if File.exist?(TEST_DATABASE_FILE)
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3", "database" => TEST_DATABASE_FILE
 )
- 
+
 load('schema.rb')
 
 RAILS_DEFAULT_LOGGER = Logger.new("spec/debug.log")
