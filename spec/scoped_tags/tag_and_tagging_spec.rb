@@ -2,7 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 
 describe Tagging do
-  before(:all) { Tagging.create!(:tag_id => 1, :taggable_id => 1) }
+  before(:all) do
+    Tagging.delete_all
+    Tagging.create!(:tag_id => 1, :taggable_id => 1)
+  end
   
   it { should belong_to(:tag) }
   it { should belong_to(:taggable) }
@@ -20,7 +23,10 @@ end
 
 
 describe Tag do
-  before(:all) { Tag.create!(:name => 'rock', :context => 'genres') }
+  before(:all) do
+    Tag.delete_all
+    Tag.create!(:name => 'rock', :context => 'genres')
+  end
   
   it { should have_many(:taggings).dependent(:delete_all) }
     

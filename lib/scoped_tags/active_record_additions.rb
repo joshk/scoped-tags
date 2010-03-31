@@ -11,8 +11,8 @@ module ScopedTags
           
           self.tag_contexts = [contexts].flatten
           
-          has_many :taggings, :as => :taggable,       :class_name => 'Tagging', :dependent => :delete_all
-          has_many :tags,     :through => :taggings,  :class_name => 'Tag',     :readonly => true
+          has_many :taggings,  :as => :taggable,       :class_name => 'Tagging', :dependent => :delete_all
+          has_many :base_tags, :through => :taggings,  :class_name => 'Tag',     :source => :tag,   :readonly => true
             
           self.tag_contexts.each do |context|
             has_many context, :through => :taggings, :class_name => 'Tag',
@@ -39,7 +39,7 @@ module ScopedTags
         tag_names = tag_names.is_a?(Array) ? tag_names : tag_names.split(TagListCollection.delimiter)
         tag_names = tag_names.collect(&:strip).reject(&:blank?)
         
-        required_options = { :include => [:taggings, :tags], 
+        required_options = { :include => [:taggings, :base_tags], 
                              :conditions => ['tags.name IN (?) AND tags.context = ?', tag_names, context] }
                              
         self.all(options.merge(required_options))

@@ -12,7 +12,7 @@ describe "ScopedTaggedModel" do
     end
 
     it "should include a tags method" do 
-      @scoped_model.should respond_to(:tags)
+      @scoped_model.should respond_to(:base_tags)
     end
 
     it "should include the genres method" do 
@@ -81,7 +81,7 @@ describe "ScopedTaggedModel" do
       @scoped_model.genre_list << tag
       @scoped_model.save!
       
-      ar_check = ScopedTaggedModel.all(:conditions => ['tags.name IN (?) AND tags.context = ?', tag, 'genres'], :include => [:taggings, :tags])
+      ar_check = ScopedTaggedModel.all(:conditions => ['tags.name IN (?) AND tags.context = ?', tag, 'genres'], :include => [:taggings, :base_tags])
       ar_check.size.should == 1
       
       ScopedTaggedModel.methods.should include('tagged_with_genres')
