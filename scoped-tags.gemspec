@@ -5,26 +5,24 @@
 
 Gem::Specification.new do |s|
   s.name = %q{scoped-tags}
-  s.version = "0.3.2"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Kalderimis"]
-  s.date = %q{2010-03-24}
+  s.date = %q{2010-03-31}
   s.email = %q{josh.kalderimis@gmail.com}
   s.files = [
     "MIT-LICENSE",
      "VERSION.yml",
      "generators/scoped_tags_migration/scoped_tags_migration_generator.rb",
      "generators/scoped_tags_migration/templates/migration.rb",
-     "install.rb",
      "lib/scoped-tags.rb",
      "lib/scoped_tags/active_record_additions.rb",
      "lib/scoped_tags/tag.rb",
      "lib/scoped_tags/tag_list_collection.rb",
      "lib/scoped_tags/tag_list_proxy.rb",
      "lib/scoped_tags/tagging.rb",
-     "readme.md",
-     "uninstall.rb"
+     "readme.md"
   ]
   s.homepage = %q{http://github.com/joshk/scoped-tags}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -38,7 +36,8 @@ Gem::Specification.new do |s|
      "spec/scoped_tags/scoped_tags_spec.rb",
      "spec/scoped_tags/tag_and_tagging_spec.rb",
      "spec/scoped_tags/tag_list_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/test.sqlite3"
   ]
 
   if s.respond_to? :specification_version then

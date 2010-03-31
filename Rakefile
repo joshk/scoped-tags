@@ -19,12 +19,10 @@ begin
 
     gemspec.files = FileList[
         "generators/**/*",
-        "install.rb",
         "lib/**/*.rb",
         "MIT-LICENSE",
         "readme.md",
-        "VERSION.yml",
-        "uninstall.rb"
+        "VERSION.yml"
       ]
     gemspec.test_files = FileList["spec/**/*"]
 
