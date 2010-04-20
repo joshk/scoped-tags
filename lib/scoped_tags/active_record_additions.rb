@@ -17,7 +17,7 @@ module ScopedTags
           self.tag_contexts.each do |context|
             has_many context, :through => :taggings, :class_name => 'Tag',
                               :source  => :tag,
-                              :conditions => { :tags => { :context => context.to_s.downcase } }
+                              :conditions => { :context => context.to_s.downcase }
 
             c = context.to_s.singularize
             define_method("#{c}_list")   { get_tag_list(context) }
